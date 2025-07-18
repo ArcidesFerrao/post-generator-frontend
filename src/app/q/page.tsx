@@ -56,7 +56,10 @@ export default function Quote() {
   };
 
   return (
-    <main className="flex flex-col min-h-full p-5 gap-[32px] row-start-2 items-center ">
+    <main className="flex flex-col min-h-full p-10 gap-[32px] row-start-2 items-center ">
+      <section>
+        <h2 className="text-2xl font-medium">Post Quote Generator</h2>
+      </section>
       <header className="flex gap-5 p-5">
         <input
           className="rounded-full border border-gray-400 px-6 py-2 w-full max-w-2xl text-base focus:outline-none focus:ring-2 focus:ring-black"
