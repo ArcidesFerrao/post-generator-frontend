@@ -1,20 +1,37 @@
 "use client";
 
 import { generate } from "@/lib/generate";
+import { getQuotePosts } from "@/lib/getQuotePosts";
+import { saveQuote } from "@/lib/save";
+import { Timestamp } from "firebase/firestore";
 import { toPng } from "html-to-image";
 import Image from "next/image";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+
+type MemoryItem = {
+  id: string;
+  title: string;
+  quote: string;
+  createdAt: Timestamp;
+};
 
 export default function Quote() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [quote, setQuote] = useState("");
+  const [memory, setMemory] = useState<MemoryItem[]>([]);
+  const [menu, setMenu] = useState(false);
+
+  // const memorizedQuote = (memo: string) => {
+  //   setQuote(memo);
+  // };
 
   const generateQuote = async () => {
     setLoading(true);
     const getQuote = await generate(prompt);
 
     setQuote(getQuote);
+    await saveQuote(getQuote, prompt);
     setLoading(false);
   };
 
@@ -54,6 +71,15 @@ export default function Quote() {
         console.error("Image download failed: ", err);
       });
   };
+
+  useEffect(() => {
+    const fetchMemory = async () => {
+      const data: MemoryItem[] = await getQuotePosts();
+      console.log(data);
+      setMemory(data);
+    };
+    fetchMemory();
+  }, []);
 
   return (
     <main className="flex flex-col min-h-full p-10 gap-[32px] row-start-2 items-center ">
@@ -141,6 +167,44 @@ export default function Quote() {
           </div>
         </section>
       )}
+      <section className="menu absolute top-10 left-5 ">
+        {!menu ? (
+          <button
+            className="opacity-55 flex items-center"
+            onClick={() => setMenu((prev) => !prev)}
+          >
+            <span className="ion--menu-sharp"></span>
+          </button>
+        ) : (
+          <section className="history max-w-xs flex flex-col">
+            <div className="menu-header opacity-60 flex justify-between items-center p-1">
+              <h2 className="text-sm px-1">Memory</h2>
+              <button onClick={() => setMenu((prev) => !prev)}>
+                <span className="line-md--menu-to-close-transition"></span>
+              </button>
+            </div>
+            <ul className="flex flex-col">
+              {memory.map((item) => (
+                <li
+                  key={item.id}
+                  className="text-black flex gap-4 py-2 items-center"
+                >
+                  <span className="text-xs ">
+                    {item.createdAt.toDate().toLocaleDateString()}
+                  </span>
+                  <button onClick={() => setQuote(item.quote)}>
+                    <p className="text-xs">
+                      {item.title.length > 32
+                        ? item.title.slice(0, 32) + "..."
+                        : item.title}
+                    </p>
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </section>
+        )}
+      </section>
     </main>
   );
 }
