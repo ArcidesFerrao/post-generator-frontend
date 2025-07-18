@@ -179,6 +179,9 @@ export default function Quote() {
           <section className="history max-w-xs flex flex-col">
             <div className="menu-header opacity-60 flex justify-between items-center p-1">
               <h2 className="text-sm px-1">Memory</h2>
+              <button onClick={() => setQuote("")} className="clear">
+                Clear
+              </button>
               <button onClick={() => setMenu((prev) => !prev)}>
                 <span className="line-md--menu-to-close-transition"></span>
               </button>
