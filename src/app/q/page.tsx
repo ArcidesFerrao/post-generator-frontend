@@ -42,9 +42,9 @@ export default function Quote() {
 
     const generatedPrompt =
       category === "market"
-        ? prompts.market("websites")
+        ? prompts.market(prompt)
         : category === "education"
-        ? prompts.education("branding")
+        ? prompts.education(prompt)
         : prompts.growth();
 
     const getQuote = await generate(generatedPrompt);
@@ -117,12 +117,20 @@ export default function Quote() {
         ))}
       </select>
       <header className="flex gap-5">
-        <input
-          className="rounded-full border border-gray-400 px-6 py-2 w-full max-w-2xl text-base focus:outline-none focus:ring-2 focus:ring-black"
-          placeholder="Prompt..."
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-        />
+        {category !== "growth" && (
+          <input
+            className="rounded-full border border-gray-400 px-6 py-2 w-full max-w-2xl text-base focus:outline-none focus:ring-2 focus:ring-black"
+            placeholder={
+              category === "education"
+                ? "Topic..."
+                : category === "market"
+                ? "Service..."
+                : "Prompt..."
+            }
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+          />
+        )}
         <button
           className="bg-black text-white rounded-full px-8 py-2 text-base hover:bg-gray-800 transition-all cursor-pointer"
           onClick={generateQuote}
