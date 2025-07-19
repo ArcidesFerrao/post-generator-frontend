@@ -15,23 +15,41 @@ type MemoryItem = {
   createdAt: Timestamp;
 };
 
+type Category = "market" | "growth" | "education";
+
 export default function Quote() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
   const [quote, setQuote] = useState("");
   const [memory, setMemory] = useState<MemoryItem[]>([]);
   const [menu, setMenu] = useState(false);
+  const [category, setCategory] = useState<Category>("growth");
 
-  // const memorizedQuote = (memo: string) => {
-  //   setQuote(memo);
-  // };
+  const categories = ["market", "growth", "education"];
+
+  const prompts = {
+    market: (service: string) =>
+      `Create a short, powerful quote that highlights the value of ${service}. Speak as if you're inspiring an African entrepreneur to believe in the future of this solution.`,
+    growth: () =>
+      `Generate a short motivational quote about growth, branding, or showing up consistently. Make it practical and raw, not fluffy.`,
+    education: (topic: string) =>
+      `Write a short educational quote that teaches African business owners why ${topic} is essential. Keep it simple but powerful.`,
+  };
 
   const generateQuote = async () => {
     setLoading(true);
-    const getQuote = await generate(prompt);
+
+    const generatedPrompt =
+      category === "market"
+        ? prompts.market("websites")
+        : category === "education"
+        ? prompts.education("branding")
+        : prompts.growth();
+
+    const getQuote = await generate(generatedPrompt);
 
     setQuote(getQuote);
-    await saveQuote(getQuote, prompt);
+    await saveQuote(getQuote, generatedPrompt);
     setLoading(false);
   };
 
@@ -47,7 +65,6 @@ export default function Quote() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        // download(dataUrl, "quote.png");
       })
       .catch((err) => {
         console.error("Image download failed: ", err);
@@ -65,7 +82,6 @@ export default function Quote() {
         document.body.appendChild(link);
         link.click();
         document.body.removeChild(link);
-        // download(dataUrl, "quote.png");
       })
       .catch((err) => {
         console.error("Image download failed: ", err);
@@ -75,7 +91,6 @@ export default function Quote() {
   useEffect(() => {
     const fetchMemory = async () => {
       const data: MemoryItem[] = await getQuotePosts();
-      console.log(data);
       setMemory(data);
     };
     fetchMemory();
@@ -86,7 +101,19 @@ export default function Quote() {
       <section>
         <h2 className="text-2xl font-medium">Post Quote Generator</h2>
       </section>
-      <header className="flex gap-5 p-5">
+      <select
+        name="category"
+        id="category"
+        value={category}
+        onChange={(e) => setCategory(e.target.value as Category)}
+      >
+        {categories.map((cat) => (
+          <option key={cat} value={cat}>
+            {cat.charAt(0).toUpperCase() + cat.slice(1)}
+          </option>
+        ))}
+      </select>
+      <header className="flex gap-5">
         <input
           className="rounded-full border border-gray-400 px-6 py-2 w-full max-w-2xl text-base focus:outline-none focus:ring-2 focus:ring-black"
           placeholder="Prompt..."
@@ -102,7 +129,7 @@ export default function Quote() {
       </header>
       {loading && <span className="line-md--loading-loop"></span>}
       {quote && (
-        <section className="quote flex flex-col gap-5 py-20">
+        <section className="quote flex flex-col gap-5 py-5">
           <section>
             <div
               id="fancy-card"
@@ -179,10 +206,16 @@ export default function Quote() {
           <section className="history max-w-xs flex flex-col">
             <div className="menu-header opacity-60 flex justify-between items-center p-1">
               <h2 className="text-sm px-1">Memory</h2>
-              <button onClick={() => setQuote("")} className="clear">
+              <button
+                onClick={() => setQuote("")}
+                className="flex items-center clear text-sm px-1"
+              >
                 Clear
               </button>
-              <button onClick={() => setMenu((prev) => !prev)}>
+              <button
+                className="flex items-center"
+                onClick={() => setMenu((prev) => !prev)}
+              >
                 <span className="line-md--menu-to-close-transition"></span>
               </button>
             </div>

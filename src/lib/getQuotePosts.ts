@@ -1,13 +1,13 @@
 import { collection, getDocs, orderBy, query, Timestamp } from "firebase/firestore";
 import { db } from "./firebase";
 
-
 type MemoryItem = {
   id: string;
   title: string;
   quote: string;
   createdAt: Timestamp;
 };
+
 export async function getQuotePosts() {
   const q = query(collection(db, "quoteBag"), orderBy("createdAt", "desc"));
   const snapshot = await getDocs(q);
@@ -19,5 +19,5 @@ export async function getQuotePosts() {
         createdAt: doc.data().createdAt,
     }
   });
-   return data;
+  return data;
 }
