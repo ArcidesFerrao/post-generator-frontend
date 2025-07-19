@@ -20,6 +20,7 @@ type Category = "market" | "growth" | "education";
 export default function Quote() {
   const [prompt, setPrompt] = useState("");
   const [loading, setLoading] = useState(false);
+  const [saving, setSaving] = useState(false);
   const [quote, setQuote] = useState("");
   const [memory, setMemory] = useState<MemoryItem[]>([]);
   const [menu, setMenu] = useState(false);
@@ -49,8 +50,10 @@ export default function Quote() {
     const getQuote = await generate(generatedPrompt);
 
     setQuote(getQuote);
-    await saveQuote(getQuote, generatedPrompt);
     setLoading(false);
+    setSaving(true);
+    await saveQuote(getQuote, generatedPrompt);
+    setSaving(false);
   };
 
   const downloadImage = () => {
@@ -123,11 +126,12 @@ export default function Quote() {
         <button
           className="bg-black text-white rounded-full px-8 py-2 text-base hover:bg-gray-800 transition-all cursor-pointer"
           onClick={generateQuote}
+          disabled={loading || saving}
         >
-          Send
+          {loading ? "Generating..." : saving ? "Saving..." : "Generate"}
         </button>
       </header>
-      {loading && <span className="line-md--loading-loop"></span>}
+      {(loading || saving) && <span className="line-md--loading-loop"></span>}
       {quote && (
         <section className="quote flex flex-col gap-5 py-5">
           <section>
