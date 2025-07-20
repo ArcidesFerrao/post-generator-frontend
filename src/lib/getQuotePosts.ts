@@ -19,5 +19,5 @@ export async function getQuotePosts() {
         createdAt: doc.data().createdAt,
     }
   });
-  return data;
+  return data.slice(0, 4);
 }

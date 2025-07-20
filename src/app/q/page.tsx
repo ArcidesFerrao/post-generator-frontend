@@ -6,6 +6,7 @@ import { saveQuote } from "@/lib/save";
 import { Timestamp } from "firebase/firestore";
 import { toPng } from "html-to-image";
 import Image from "next/image";
+import Link from "next/link";
 import React, { useEffect, useState } from "react";
 
 type MemoryItem = {
@@ -249,6 +250,9 @@ export default function Quote() {
                   </button>
                 </li>
               ))}
+              <Link href="/quotes">
+                <li className="text-xs ">more...</li>
+              </Link>
             </ul>
           </section>
         )}
