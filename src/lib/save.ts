@@ -15,3 +15,4 @@ export async function saveQuote(quote: string, prompt: string) {
         console.error("Error saving quote: ", err);
     }
 }
+

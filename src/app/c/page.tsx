@@ -21,11 +21,11 @@ export default function ChatPage() {
     <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
       <main className="flex flex-col gap-[32px] row-start-2 items-center sm:items-start">
         <section>
-          <h2 className="text-2xl font-medium">Gemma:2b</h2>
+          <h2 className="text-2xl font-medium">Gemma3:4b</h2>
         </section>
         <div className="flex gap-5 items-center flex-col-reverse ">
           {result && !loading && (
-            <div className="w-full  rounded-lg bg-gray-100 px-6 py-10 shadow-sm space-y-4 max-w-none ">
+            <div className="w-full  rounded-lg text-black bg-gray-100 px-6 py-10 shadow-sm space-y-4 max-w-none ">
               <ReactMarkdown remarkPlugins={[remarkGfm]}>
                 {result}
               </ReactMarkdown>

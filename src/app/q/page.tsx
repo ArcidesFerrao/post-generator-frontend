@@ -31,11 +31,11 @@ export default function Quote() {
 
   const prompts = {
     market: (service: string) =>
-      `Create a short, powerful quote that highlights the value of ${service}. Speak as if you're inspiring an African entrepreneur to believe in the future of this solution.`,
+      `Create a short, powerful quote that highlights the value of ${service}. Speak as if you're inspiring an African entrepreneur to believe in the future of this solution. Write just the quote with no additional text`,
     growth: () =>
-      `Generate a short motivational quote about growth, branding, or showing up consistently. Make it practical and raw, not fluffy.`,
+      `Generate a short motivational quote about growth, branding, or showing up consistently. Make it practical and raw, not fluffy. Write just the quote with no additional text`,
     education: (topic: string) =>
-      `Write a short educational quote that teaches African business owners why ${topic} is essential. Keep it simple but powerful.`,
+      `Write a short educational quote that teaches African business owners why ${topic} is essential. Keep it simple but powerful.  Write just the quote with no additional text`,
   };
 
   const generateQuote = async () => {
@@ -45,8 +45,8 @@ export default function Quote() {
       category === "market"
         ? prompts.market(prompt)
         : category === "education"
-        ? prompts.education(prompt)
-        : prompts.growth();
+          ? prompts.education(prompt)
+          : prompts.growth();
 
     const getQuote = await generate(generatedPrompt);
 
@@ -125,8 +125,8 @@ export default function Quote() {
               category === "education"
                 ? "Topic..."
                 : category === "market"
-                ? "Service..."
-                : "Prompt..."
+                  ? "Service..."
+                  : "Prompt..."
             }
             value={prompt}
             onChange={(e) => setPrompt(e.target.value)}
@@ -155,14 +155,14 @@ export default function Quote() {
               <div className="flex-1 flex flex-col justify-center">
                 {/* Quote text */}
                 <p className="text-2xl font-light text-center leading-relaxed mb-6 relative">
-                  <span className="absolute left-0 text-6xl font-serif text-gray-400 opacity-60 leading-none mb-4">
+                  {/* <span className="absolute left-0 text-6xl font-serif text-gray-400 opacity-60 leading-none mb-4">
                     &quot;
-                  </span>
+                  </span> */}
                   {quote.replace(/"/g, "")}
                   {/* Closing quote mark */}
-                  <span className="absolute right-0 text-6xl font-serif text-gray-400 opacity-60">
+                  {/* <span className="absolute right-0 text-6xl font-serif text-gray-400 opacity-60">
                     &quot;
-                  </span>
+                  </span> */}
                 </p>
               </div>
 
@@ -171,15 +171,15 @@ export default function Quote() {
                 {/* Author info */}
                 <div className="text-left">
                   <div className="font-semibold text-gray-200 text-base">
-                    INNOVANTE
+                    Evolure Labs
                   </div>
-                  <p className="text-gray-400 text-xs">@innovante_tech</p>
+                  <p className="text-gray-400 text-xs">@evolurelabs</p>
                 </div>
               </div>
 
               {/* Logo watermark */}
               <div className="absolute bottom-6 right-4 opacity-70">
-                <Image src="/logo.png" alt="logo" width={24} height={24} />
+                <Image src="/logoo.png" alt="logo" width={32} height={32} />
               </div>
             </div>
             <div className="py-5">
@@ -196,8 +196,8 @@ export default function Quote() {
               {quote}
             </p>
             <div className="flex justify-between items-center content-end py-2 opacity-60">
-              <span className="opacity-60 text-sm">@innovante_tech</span>
-              <Image src={"/logo.png"} alt="logo" width={32} height={32} />
+              <span className="opacity-60 text-sm">@evolurelabs</span>
+              <Image src={"/logoo.png"} alt="logo" width={32} height={32} />
             </div>
           </div>
           <div className="py-5">
